@@ -67,11 +67,11 @@ func (y *YdentifiClient) fetchServerChallenge() (string, error) {
 	return responseData.authorizationChallenge, nil
 }
 
-// createChallengeResponse generates a response to an Ydentifi API server challenge
-func (y *YdentifiClient) createChallengeResponse(challenge string, signKeyPem string, apiPassword string) (string, error) {
+// CreateChallengeResponse generates a response to an Ydentifi API server challenge
+func (y *YdentifiClient) CreateChallengeResponse(challenge string, signKeyPem string, apiPassword string) (string, error) {
 	signature, err := cryptography.SignRsaPss(y.ClientAppId+challenge, signKeyPem)
 	if err != nil {
-		return "", fmt.Errorf("YdentifiClient.createChallengeResponse failed with error [%w]", err)
+		return "", fmt.Errorf("YdentifiClient.CreateChallengeResponse failed with error [%w]", err)
 	}
 
 	challengeResponse := ApiAuthToken{
@@ -83,7 +83,7 @@ func (y *YdentifiClient) createChallengeResponse(challenge string, signKeyPem st
 
 	challengeResponseBytes, err := json.Marshal(challengeResponse)
 	if err != nil {
-		return "", fmt.Errorf("YdentifiClient.createChallengeResponse failed to jsonify response with error: [%w]", err)
+		return "", fmt.Errorf("YdentifiClient.CreateChallengeResponse failed to jsonify response with error: [%w]", err)
 	}
 	return string(challengeResponseBytes), nil
 }
@@ -93,7 +93,7 @@ func (y *YdentifiClient) CreateApiAuthToken(signKeyPem string, apiPassword strin
 	if err != nil {
 		return "", fmt.Errorf("YdentifClient.CreatApiAuthToken to fetch server challenge with error [%w]", err)
 	}
-	authToken, err := y.createChallengeResponse(serverChallenge, signKeyPem, apiPassword)
+	authToken, err := y.CreateChallengeResponse(serverChallenge, signKeyPem, apiPassword)
 	if err != nil {
 		return "", fmt.Errorf("YdentifClient.CreatApiAuthToken to create challenge response [%w]", err)
 	}
