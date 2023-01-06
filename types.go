@@ -1,6 +1,6 @@
 package yclient
 
-type serverChallengeResponse struct {
+type ServerChallengeResponse struct {
 	authorizationChallenge string
 }
 
@@ -13,6 +13,14 @@ type ApiAuthToken struct {
 	RequestorPassword string
 	Challenge         string
 	Signature         string
+}
+
+// CreateUserPayload defines the required
+// payload structure for the respective
+// endpoints in the Ydentifi API
+type CreateUserPayload struct {
+	UserEmail       string
+	UserDisplayName string
 }
 
 // CreateMobile2faUserPayload defines the required
