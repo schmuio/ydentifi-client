@@ -40,28 +40,28 @@ func (y *YdentifiClient) KeyPack() (string, string, string, string, string, erro
 	return encryptionPrivateKey, encryptionPublicKey, signPrivateKey, signPublicKey, ydentifiApiPassword, nil
 }
 
-// fetchServerChallenge gets a challenge from the Ydentifi API server as a part
+// FetchServerChallenge gets a challenge from the Ydentifi API server as a part
 // of the service-to-service authentication process
-func (y *YdentifiClient) fetchServerChallenge() (string, error) {
+func (y *YdentifiClient) FetchServerChallenge() (string, error) {
 	response, err := http.Get(y.ApiBaseUrl + GetServerChallengeUrl)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.fetchServerChallenge failed with error [%w]", err)
+		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed with error [%w]", err)
 	}
 	defer response.Body.Close()
 
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.fetchServerChallenge failed reading response body with error [%w]", err)
+		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed reading response body with error [%w]", err)
 	}
 
 	if response.StatusCode != 200 && response.StatusCode != 201 {
-		return "", fmt.Errorf("YdentifClient.fetchServerChallenge failed to get server challenge with sever message [%v] and status code [%v]", string(responseBody), response.StatusCode)
+		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed to get server challenge with sever message [%v] and status code [%v]", string(responseBody), response.StatusCode)
 	}
 
-	responseData := serverChallengeResponse{}
+	responseData := ServerChallengeResponse{}
 	err = json.Unmarshal(responseBody, &responseData)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.fetchServerChallenge failed unmarshalling response body with error [%w]", err)
+		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed unmarshalling response body with error [%w]", err)
 	}
 
 	return responseData.authorizationChallenge, nil
@@ -89,7 +89,7 @@ func (y *YdentifiClient) CreateChallengeResponse(challenge string, signKeyPem st
 }
 
 func (y *YdentifiClient) CreateApiAuthToken(signKeyPem string, apiPassword string) (string, error) {
-	serverChallenge, err := y.fetchServerChallenge()
+	serverChallenge, err := y.FetchServerChallenge()
 	if err != nil {
 		return "", fmt.Errorf("YdentifClient.CreatApiAuthToken to fetch server challenge with error [%w]", err)
 	}
