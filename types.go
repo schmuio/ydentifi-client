@@ -19,8 +19,7 @@ type ApiAuthToken struct {
 // payload structure for the respective
 // endpoints in the Ydentifi API
 type CreateUserPayload struct {
-	UserEmail       string
-	UserDisplayName string
+	UserEmail string
 }
 
 // CreateMobile2faUserPayload defines the required
