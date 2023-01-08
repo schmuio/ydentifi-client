@@ -71,3 +71,13 @@ type Authenticate2faPayload struct {
 	ContinueToken string
 	Totp          string
 }
+
+// UpdatePublicKeysPayload defines the required
+// payload structure for the respective
+// endpoints in the Ydentifi API
+//
+// Note: keys are expected in PEM format
+type UpdatePublicKeysPayload struct {
+	newEncryptionPublicKey string
+	newSigngingPublicKey   string
+}
