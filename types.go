@@ -79,5 +79,5 @@ type Authenticate2faPayload struct {
 // Note: keys are expected in PEM format
 type UpdatePublicKeysPayload struct {
 	NewEncryptionPublicKey string
-	NewSigngingPublicKey   string
+	NewSigningPublicKey   string
 }
