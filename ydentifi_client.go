@@ -6,6 +6,7 @@
 package yclient
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/schmuio/cryptography"
@@ -42,60 +43,57 @@ func (y *YdentifiClient) KeyPack() (string, string, string, string, string, erro
 
 // FetchServerChallenge gets a challenge from the Ydentifi API server as a part
 // of the service-to-service authentication process
-func (y *YdentifiClient) FetchServerChallenge() (string, error) {
+func (y *YdentifiClient) FetchServerChallenge() (string, string, error) {
 	response, err := http.Get(y.ApiBaseUrl + GetServerChallengeUrl)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed with error [%w]", err)
+		return "", "", fmt.Errorf("YdentifClient.FetchServerChallenge failed with error [%w]", err)
 	}
 	defer response.Body.Close()
 
 	responseBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed reading response body with error [%w]", err)
+		return "", "", fmt.Errorf("YdentifClient.FetchServerChallenge failed reading response body with error [%w]", err)
 	}
 
 	if response.StatusCode != 200 && response.StatusCode != 201 {
-		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed to get server challenge with sever message [%v] and status code [%v]", string(responseBody), response.StatusCode)
+		return "", "", fmt.Errorf("YdentifClient.FetchServerChallenge failed to get server challenge with sever message [%v] and status code [%v]", string(responseBody), response.StatusCode)
 	}
 
-	responseData := ServerChallengeResponse{}
+	responseData := ServerChallenge{}
 	err = json.Unmarshal(responseBody, &responseData)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.FetchServerChallenge failed unmarshalling response body with error [%w]", err)
+		return "", "", fmt.Errorf("YdentifClient.FetchServerChallenge failed unmarshalling response body with error [%w]", err)
 	}
 
-	return responseData.authorizationChallenge, nil
+	return responseData.AuthorizationChallenge, responseData.ServerPublicEncryptionKey, nil
 }
 
-// CreateChallengeResponse generates a response to an Ydentifi API server challenge
-func (y *YdentifiClient) CreateChallengeResponse(challenge string, signKeyPem string, apiPassword string) (string, error) {
-	signature, err := cryptography.SignRsaPss(y.ClientAppId+challenge, signKeyPem)
+// ApiAuthToken generates authorization credentials for invoking the
+// Ydentifi API
+func (y *YdentifiClient) ServerAuthorization(serverChallenge string, serverPublicEncryptionKeyPem string, clientSignKeyPem string) (string, error) {
+	signature, err := cryptography.SignRsaPss(serverChallenge, clientSignKeyPem)
 	if err != nil {
-		return "", fmt.Errorf("YdentifiClient.CreateChallengeResponse failed with error [%w]", err)
+		return "", fmt.Errorf("YdentifiClient.ServerAuthorization failed to issue signature with error [%w]", err)
 	}
-
-	challengeResponse := ApiAuthToken{
-		RequestorId:       y.ClientAppId,
-		RequestorPassword: apiPassword,
-		Challenge:         challenge,
-		Signature:         signature,
+	challengeResponse := ServerChallengeResponse{
+		Challenge: serverChallenge,
+		Signature: signature,
 	}
-
 	challengeResponseBytes, err := json.Marshal(challengeResponse)
 	if err != nil {
-		return "", fmt.Errorf("YdentifiClient.CreateChallengeResponse failed to jsonify response with error: [%w]", err)
+		return "", fmt.Errorf("YdentifiClient.ServerAuthorization failed to jsonify response with error: [%w]", err)
 	}
-	return string(challengeResponseBytes), nil
-}
-
-func (y *YdentifiClient) CreateApiAuthToken(signKeyPem string, apiPassword string) (string, error) {
-	serverChallenge, err := y.FetchServerChallenge()
+	token, encryptedKey, err := cryptography.EnvelopeEncryptAes(string(challengeResponseBytes), serverPublicEncryptionKeyPem)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.CreatApiAuthToken to fetch server challenge with error [%w]", err)
+		return "", fmt.Errorf("YdentifiClient.ServerAuthorization failed to generate credentials with error: [%w]", err)
 	}
-	authToken, err := y.CreateChallengeResponse(serverChallenge, signKeyPem, apiPassword)
+	authorization := ServerAuthorizationPayload{
+		Token:        token,
+		EncryptedKey: encryptedKey,
+	}
+	serverCredentials, err := json.Marshal(authorization)
 	if err != nil {
-		return "", fmt.Errorf("YdentifClient.CreatApiAuthToken to create challenge response [%w]", err)
+		return "", fmt.Errorf("YdentifiClient.ServerAuthorization failed to jsonify credentials with error: [%w]", err)
 	}
-	return authToken, nil
+	return base64.StdEncoding.EncodeToString(serverCredentials), nil
 }
