@@ -1,18 +1,26 @@
 package yclient
 
-type ServerChallengeResponse struct {
-	authorizationChallenge string
+// ServerChallenge defines the content of the
+// the server challenge payload
+type ServerChallenge struct {
+	AuthorizationChallenge    string
+	ServerPublicEncryptionKey string
 }
 
-// ApiAuthToken contains all
+// ServerChallengeResponse contains all
 // the necessary information for a
 // consumer application to authenticate
 // to the Ydentifi API
-type ApiAuthToken struct {
-	RequestorId       string
-	RequestorPassword string
-	Challenge         string
-	Signature         string
+type ServerChallengeResponse struct {
+	Challenge string
+	Signature string
+}
+
+// ServerAuthorization contains credentials for
+// calling the API endpoints
+type ServerAuthorizationPayload struct {
+	Token        string
+	EncryptedKey string
 }
 
 // CreateUserPayload defines the required
@@ -79,5 +87,5 @@ type Authenticate2faPayload struct {
 // Note: keys are expected in PEM format
 type UpdatePublicKeysPayload struct {
 	NewEncryptionPublicKey string
-	NewSigningPublicKey   string
+	NewSigningPublicKey    string
 }
