@@ -7,10 +7,8 @@ type ServerChallenge struct {
 	ServerPublicEncryptionKey string
 }
 
-// ServerChallengeResponse contains all
-// the necessary information for a
-// consumer application to authenticate
-// to the Ydentifi API
+// ServerChallengeResponse contains a signature
+// on the server challenge
 type ServerChallengeResponse struct {
 	Challenge string
 	Signature string
@@ -20,13 +18,21 @@ type ServerChallengeResponse struct {
 // calling the API endpoints
 type ServerAuthorizationPayload struct {
 	Token        string
-	EncryptedKey string
+	EncryptedKey string  // Encrypted AES or ChaCha20 compatible key used for envelope encryption
 }
 
 // CreateUserPayload defines the required
 // payload structure for the respective
 // endpoints in the Ydentifi API
 type CreateUserPayload struct {
+	UserEmail string
+}
+
+
+// UnlockUserPayload defines the required
+// payload structure for the respective
+// endpoints in the Ydentifi API
+type UnlockUserPayload struct {
 	UserEmail string
 }
 
