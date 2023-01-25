@@ -18,7 +18,7 @@ type ServerChallengeResponse struct {
 // calling the API endpoints
 type ServerAuthorizationPayload struct {
 	Token        string
-	EncryptedKey string  // Encrypted AES or ChaCha20 compatible key used for envelope encryption
+	EncryptedKey string // Encrypted AES or ChaCha20 compatible key used for envelope encryption
 }
 
 // CreateUserPayload defines the required
@@ -27,7 +27,6 @@ type ServerAuthorizationPayload struct {
 type CreateUserPayload struct {
 	UserEmail string
 }
-
 
 // UnlockUserPayload defines the required
 // payload structure for the respective
