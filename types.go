@@ -48,9 +48,9 @@ type CreateMobile2faUserPayload struct {
 // payload structure for the respective
 // endpoints in the Ydentifi API
 type AuthenticateEmailAndPasswordPayload struct {
-	UserEmail         string
-	PasswordPlaintext string
-	ContinueToken     string
+	UserEmail          string
+	PasswordPlaintext  string
+	IdentityProofToken string
 }
 
 // DeleteUserPayload defines the required
