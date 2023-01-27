@@ -82,7 +82,7 @@ type EnrollSoftToken2faPayload struct {
 // payload structure for the respective
 // endpoints in the Ydentifi API
 type Authenticate2faPayload struct {
-	IdentityProofTokenToken string
+	IdentityProofToken string
 	Totp          string
 }
 
