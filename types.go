@@ -75,7 +75,7 @@ type UserRecordData struct {
 // payload structure for the respective
 // endpoints in the Ydentifi API
 type EnrollSoftToken2faPayload struct {
-	ContinueToken string
+	IdentityProofToken string
 }
 
 // Authenticate2faPayload defines the required
