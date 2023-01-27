@@ -50,6 +50,7 @@ type CreateMobile2faUserPayload struct {
 type AuthenticateEmailAndPasswordPayload struct {
 	UserEmail         string
 	PasswordPlaintext string
+	ContinueToken     string
 }
 
 // DeleteUserPayload defines the required
