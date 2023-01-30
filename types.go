@@ -81,9 +81,10 @@ type EnrollSoftToken2faPayload struct {
 // Authenticate2faPayload defines the required
 // payload structure for the respective
 // endpoints in the Ydentifi API
-type Authenticate2faPayload struct {
+type AuthenticateTotpPayload struct {
+	UserEmail          string
+	Totp               string
 	IdentityProofToken string
-	Totp          string
 }
 
 // UpdatePublicKeysPayload defines the required
