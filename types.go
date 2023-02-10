@@ -96,6 +96,13 @@ type VerifyEmailPayload struct {
 	IdentityProofToken string
 }
 
+// SendEmailVerificationCodePayload defines the required
+// payload structure for the respective
+// endpoints in the Ydentifi API
+type SendEmailVerificationCodePayload struct {
+	UserEmail string
+}
+
 // UpdatePublicKeysPayload defines the required
 // payload structure for the respective
 // endpoints in the Ydentifi API
