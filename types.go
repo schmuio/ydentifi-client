@@ -124,6 +124,7 @@ type IdTokenClaims struct {
 	Iat    time.Time              `json:"iat"`
 	Exp    time.Time              `json:"exp"`
 	Ctx    []string               `json:"ctx"`
+	Uid    string                 `json:"uid"`
 	Custom map[string]interface{} `json:"custom"`
 }
 
