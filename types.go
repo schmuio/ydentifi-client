@@ -1,5 +1,9 @@
 package yclient
 
+import (
+	"time"
+)
+
 // ServerChallenge defines the content of the
 // the server challenge payload
 type ServerChallenge struct {
@@ -111,4 +115,21 @@ type SendEmailVerificationCodePayload struct {
 type UpdatePublicKeysPayload struct {
 	NewEncryptionPublicKey string
 	NewSigningPublicKey    string
+}
+
+// IdTokenClaims contains the claims payload of an IdToken
+type IdTokenClaims struct {
+	Iss    string                 `json:"iss"`
+	Aud    string                 `json:"aud"`
+	Iat    time.Time              `json:"iat"`
+	Exp    time.Time              `json:"exp"`
+	Ctx    []string               `json:"ctx"`
+	Custom map[string]interface{} `json:"custom"`
+}
+
+// IdToken is a type containing proof of identity
+// claims for a particular user
+type IdToken struct {
+	Claims    map[string]interface{} `json:"claims"`
+	Signature string                 `json:"signature"`
 }
