@@ -131,6 +131,6 @@ type IdTokenClaims struct {
 // IdToken is a type containing proof of identity
 // claims for a particular user
 type IdToken struct {
-	Claims    map[string]interface{} `json:"claims"`
-	Signature string                 `json:"signature"`
+	Claims    IdTokenClaims `json:"claims"`
+	Signature string        `json:"signature"`
 }
