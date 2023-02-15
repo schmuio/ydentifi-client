@@ -119,6 +119,7 @@ type UpdatePublicKeysPayload struct {
 
 // IdTokenClaims contains the claims payload of an IdToken
 type IdTokenClaims struct {
+	Nonce  string                 `json:"nonce"`
 	Iss    string                 `json:"iss"`
 	Aud    string                 `json:"aud"`
 	Iat    time.Time              `json:"iat"`
