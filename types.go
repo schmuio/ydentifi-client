@@ -107,6 +107,15 @@ type SendEmailVerificationCodePayload struct {
 	UserEmail string
 }
 
+// AuthenticateOobCodePayload defines the required
+// payload structure for the respective
+// endpoints in the Ydentifi API
+type AuthenticateOobCodePayload struct {
+	UserEmail          string
+	OobCode            string
+	IdentityProofToken string
+}
+
 // UpdatePublicKeysPayload defines the required
 // payload structure for the respective
 // endpoints in the Ydentifi API
