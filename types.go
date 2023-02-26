@@ -107,10 +107,10 @@ type SendEmailVerificationCodePayload struct {
 	UserEmail string
 }
 
-// IssueUserOobCodePayload defines the required
+// IssueUserOobTokenPayload defines the required
 // payload structure for the respective
 // endpoints in the Ydentifi API
-type IssueUserOobCodePayload struct {
+type IssueUserOobTokenPayload struct {
 	UserEmail string
 }
 
