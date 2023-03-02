@@ -29,7 +29,9 @@ type ServerAuthorizationPayload struct {
 // payload structure for the respective
 // endpoints in the Ydentifi API
 type CreateUserPayload struct {
-	UserEmail string
+	UserEmail          string
+	Password           string
+	IdentityProofToken string
 }
 
 // UnlockUserPayload defines the required
