@@ -153,3 +153,12 @@ type IdToken struct {
 	Claims    IdTokenClaims `json:"claims"`
 	Signature string        `json:"signature"`
 }
+
+// ResetPasswordPayload defines the required
+// payload structure for the respective
+// endpoints in the Ydentifi API
+type ResetPasswordPayload struct {
+	UserEmail          string
+	Password           string
+	IdentityProofToken string
+}
