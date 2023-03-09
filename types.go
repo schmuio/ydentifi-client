@@ -159,6 +159,6 @@ type IdToken struct {
 // endpoints in the Ydentifi API
 type ResetPasswordPayload struct {
 	UserEmail          string
-	Password           string
+	NewPassword        string
 	IdentityProofToken string
 }
