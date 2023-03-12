@@ -161,4 +161,5 @@ type ResetPasswordPayload struct {
 	UserEmail          string
 	NewPassword        string
 	IdentityProofToken string
+	OobRecovery        bool  // Whether the IdentityProofToken oncludes an oob proof of ID
 }
