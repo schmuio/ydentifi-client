@@ -161,5 +161,13 @@ type ResetPasswordPayload struct {
 	UserEmail          string
 	NewPassword        string
 	IdentityProofToken string
-	OobRecovery        bool  // Whether the IdentityProofToken oncludes an oob proof of ID
+	OobRecovery        bool // Whether the IdentityProofToken oncludes an oob proof of ID
+}
+
+// MfaIdentityPayload defines the required
+// payload structure for the respective
+// endpoints in the Ydentifi API
+type MfaIdentityPayload struct {
+	UserEmail          string
+	IdentityProofToken string
 }
